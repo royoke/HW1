@@ -22,6 +22,10 @@ app.debug = True
 def hello_to_you():
     return 'Hello!'
 
+@app.route('/class')
+def welcome_to_you():
+    return 'Welcome to SI 364!'
+
 
 if __name__ == '__main__':
     app.run()
