@@ -13,8 +13,9 @@
 
 ## [PROBLEM 1] - 150 points
 ## Below is code for one of the simplest possible Flask applications. Edit the code so that once you run this application locally and go to the URL 'http://localhost:5000/class', you see a page that says "Welcome to SI 364!"
-
+import requests
 from flask import Flask
+
 app = Flask(__name__)
 app.debug = True
 
@@ -27,12 +28,23 @@ def welcome_to_you():
     return 'Welcome to SI 364!'
 
 
-if __name__ == '__main__':
-    app.run()
+
 
 
 ## [PROBLEM 2] - 250 points
 ## Edit the code chunk above again so that if you go to the URL 'http://localhost:5000/movie/<name-of-movie-here-one-word>' you see a big dictionary of data on the page. For example, if you go to the URL 'http://localhost:5000/movie/ratatouille', you should seesomething like the data shown in the included file sample_ratatouille_data.txt, which contains data about the animated movie Ratatouille. However, if you go to the url http://localhost:5000/movie/titanic, you should get different data, and if you go to the url 'http://localhost:5000/movie/dsagdsgskfsl' for example, you should see data on the page that looks like this:
+@app.route('/movie/<title>')
+def get_movie_info(title):
+	baseURL = 'https://itunes.apple.com/search?'
+	params= {}
+	params['term'] = title
+	params['media'] = 'movie'
+	response = requests.get(baseURL, params = params)
+	return response.text
+
+if __name__ == '__main__':
+    app.run()
+
 
 # {
 #  "resultCount":0,
