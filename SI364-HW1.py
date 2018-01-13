@@ -14,7 +14,7 @@
 ## [PROBLEM 1] - 150 points
 ## Below is code for one of the simplest possible Flask applications. Edit the code so that once you run this application locally and go to the URL 'http://localhost:5000/class', you see a page that says "Welcome to SI 364!"
 import requests
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 app.debug = True
@@ -39,11 +39,10 @@ def get_movie_info(title):
 	params= {}
 	params['term'] = title
 	params['media'] = 'movie'
-	response = requests.get(baseURL, params = params)
-	return response.text
+	movie_info = requests.get(baseURL, params = params)
+	return movie_info.text
 
-if __name__ == '__main__':
-    app.run()
+
 
 
 # {
@@ -63,7 +62,26 @@ if __name__ == '__main__':
 ## Edit the above Flask application code so that if you run the application locally and got to the URL http://localhost:5000/question, you see a form that asks you to enter your favorite number.
 ## Once you enter a number and submit it to the form, you should then see a web page that says "Double your favorite number is <number>". For example, if you enter 2 into the form, you should then see a page that says "Double your favorite number is 4". Careful about types in your Python code!
 ## You can assume a user will always enter a number only.
+@app.route('/question',methods=['GET'])
+def get_question():
+	formstring = """
+	<br>
+	<form action="http://localhost:5000/question" method='GET'>
+	Enter your favorite number: <br>
+	<input type="integer" name=fav_number value=0>
+	<br>
+	<input type="submit" value="Submit">
+	"""
+	if request.method == "GET":
+		doubled_num = request.args.get('fav_number',"")
+		if doubled_num != "":
+			formstring += "<br>Double your favorite number is: {}".format(int(doubled_num)*2)
+			return formstring
+		else:
+			return formstring
 
+if __name__ == '__main__':
+    app.run()
 
 ## [PROBLEM 4] - 350 points
 
